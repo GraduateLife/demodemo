@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+// prisma/schema.prisma
+// ...
+model VillageAsset {
+  id        Int   @id @default(autoincrement())
+  // 权属单位名称
+  ownerCompanyName String 
+  //经营性资产名称
+  assetName String
+  //权证号
+  authNumber String
+  //建筑面积
+  areaM2 String
+  //入账单位名称
+  billingAddress String
+  //资产平台登记情况(是/否)
+  hasRegistered String
+  //资产原值
+  originalAssetInWanYuan String
+
+  LeasingCompanies LeasingCompany[]
+   usedAreaM2 String
+ notUsedAreaM2 String
+  remarks String?
+  
+
+  
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+model VillageLand {
+  id        Int   @id @default(autoincrement())
+  // 权属单位名称
+  ownerCompanyName String 
+  //经营性资产名称
+  landName String
+  //权证号
+  authNumber String
+  //建筑面积
+  areaM2 String
+  //资产平台登记情况(是/否)
+  hasRegistered String
+  hasArts String
+  usedAreaM2 String
+  notUsedAreaM2 String
+  RedAreaM2 String
+
+  transferredAreaM2 String
+  transferredRedAreaM2 String
+  transferredValue String
+  transferStartedAt String
+  transferEndedAt String
+
+  remarks String?
+  
+
+  
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  LandUser LandUser[]
+}
+
+model  LeasingCompany{
+ id        Int   @id @default(autoincrement())
+ villige_id Int
+
+ VillageAsset VillageAsset @relation(fields: [villige_id], references: [id])
+
+
+ companyName String
+ isUsingBothLandAndBuilding String
+ companyAuthNumber String
+ companyAreaM2 String
+ startedAt String
+ endedAt String
+ rentalInWanYuan String
+ isPubliclyTraded String
+ notPublicReason String?
+ billingAddressIsOwnerVillage String
+ billingNotIdenticalReason String?
+
+ 
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  }
+
+  model  LandUser{
+ id        Int   @id @default(autoincrement())
+ villige_id Int
+
+ VillageLand VillageLand @relation(fields: [villige_id], references: [id])
+
+ companyName String
+ companyAreaM2 String
+ startedAt String
+ endedAt String
+ rentalInWanYuan String
+ isPubliclyTraded String
+ notPublicReason String?
+ billingAddressIsOwnerVillage String
+ billingNotIdenticalReason String?
+
+ 
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  }
